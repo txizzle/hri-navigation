@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "pioneer_hri")
+set(pioneer_hri_MAINTAINER "ted <ted@todo.todo>")
+set(pioneer_hri_DEPRECATED "")
+set(pioneer_hri_VERSION "0.0.0")
+set(pioneer_hri_BUILD_DEPENDS "rospy" "std_msgs")
+set(pioneer_hri_RUN_DEPENDS "rospy" "std_msgs")
+set(pioneer_hri_BUILDTOOL_DEPENDS "catkin")

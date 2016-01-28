@@ -1,0 +1,8 @@
+prefix=/home/ted/catkin_ws/devel
+
+Name: pioneer_hri
+Description: Description of pioneer_hri
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ted/catkin_ws/devel/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/home/ted/catkin_ws/install
+
+Name: hri_navigation
+Description: Description of hri_navigation
+Version: 0.0.0
+Cflags: -I/home/ted/catkin_ws/install/include
+Libs: -L/home/ted/catkin_ws/install/lib 
+Requires: message_runtime
