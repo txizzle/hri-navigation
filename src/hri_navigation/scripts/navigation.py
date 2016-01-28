@@ -2,9 +2,9 @@
 
 ## Navigation Node
 ##      Subscribes to 
-##          'board_position', 'board_velocity', and 'next_goal'
+##          '/turtle1/pose', and 'next_goal'
 ##      Publishes to:
-##          'cmd_vel', sends geometry_msgs/Twist
+##          '/turtle1/cmd_vel', sends geometry_msgs/Twist
 ##          'game_status', sends a std_msgs/String message on game status. 
 
 import rospy
@@ -105,14 +105,11 @@ def navigation():
     gs_publisher = rospy.Publisher('game_status', String, queue_size=10)
 
     while not rospy.is_shutdown():
-        # rospy.loginfo("Current position: [ x: %f, y: %f, theta: %f ]"%(position['x'], position['y'], position['theta']))
-        # rospy.loginfo("Current velocity: [ linear_velocity: %f, angular_velocity: %f ] "%(velocity['lv'], velocity['av']))
-
         # Check if we've reached the current goal
         if distance([position['x'], position['y']], next_goal) < goal_radius:
             rospy.loginfo("Reached a goal! Waiting for next goal information")
 
-            # To sent more info: `rostopic pub -1 /next_goal hri_navigation/Goal -- 7.2 3.4`
+            # To send more info: `rostopic pub -1 /next_goal hri_navigation/Goal -- 7.2 3.4`
             # Replace 7.2 and 3.4 with own values
  
             global reached
