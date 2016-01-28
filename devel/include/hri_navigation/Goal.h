@@ -24,21 +24,21 @@ struct Goal_
   typedef Goal_<ContainerAllocator> Type;
 
   Goal_()
-    : X(0)
-    , Y(0)  {
+    : x(0.0)
+    , y(0.0)  {
     }
   Goal_(const ContainerAllocator& _alloc)
-    : X(0)
-    , Y(0)  {
+    : x(0.0)
+    , y(0.0)  {
     }
 
 
 
-   typedef uint32_t _X_type;
-  _X_type X;
+   typedef float _x_type;
+  _x_type x;
 
-   typedef uint32_t _Y_type;
-  _Y_type Y;
+   typedef float _y_type;
+  _y_type y;
 
 
 
@@ -117,12 +117,12 @@ struct MD5Sum< ::hri_navigation::Goal_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "d1f2aebb6961d1330665be5194655a79";
+    return "ff8d7d66dd3e4b731ef14a45d38888b6";
   }
 
   static const char* value(const ::hri_navigation::Goal_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xd1f2aebb6961d133ULL;
-  static const uint64_t static_value2 = 0x0665be5194655a79ULL;
+  static const uint64_t static_value1 = 0xff8d7d66dd3e4b73ULL;
+  static const uint64_t static_value2 = 0x1ef14a45d38888b6ULL;
 };
 
 template<class ContainerAllocator>
@@ -141,8 +141,8 @@ struct Definition< ::hri_navigation::Goal_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "uint32 X\n\
-uint32 Y\n\
+    return "float32 x\n\
+float32 y\n\
 ";
   }
 
@@ -161,8 +161,8 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.X);
-      stream.next(m.Y);
+      stream.next(m.x);
+      stream.next(m.y);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER;
@@ -181,10 +181,10 @@ struct Printer< ::hri_navigation::Goal_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::hri_navigation::Goal_<ContainerAllocator>& v)
   {
-    s << indent << "X: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.X);
-    s << indent << "Y: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.Y);
+    s << indent << "x: ";
+    Printer<float>::stream(s, indent + "  ", v.x);
+    s << indent << "y: ";
+    Printer<float>::stream(s, indent + "  ", v.y);
   }
 };
 

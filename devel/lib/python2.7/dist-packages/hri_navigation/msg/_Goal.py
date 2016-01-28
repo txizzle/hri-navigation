@@ -7,14 +7,14 @@ import struct
 
 
 class Goal(genpy.Message):
-  _md5sum = "d1f2aebb6961d1330665be5194655a79"
+  _md5sum = "ff8d7d66dd3e4b731ef14a45d38888b6"
   _type = "hri_navigation/Goal"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """uint32 X
-uint32 Y
+  _full_text = """float32 x
+float32 y
 """
-  __slots__ = ['X','Y']
-  _slot_types = ['uint32','uint32']
+  __slots__ = ['x','y']
+  _slot_types = ['float32','float32']
 
   def __init__(self, *args, **kwds):
     """
@@ -24,7 +24,7 @@ uint32 Y
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       X,Y
+       x,y
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -33,13 +33,13 @@ uint32 Y
     if args or kwds:
       super(Goal, self).__init__(*args, **kwds)
       #message fields cannot be None, assign default values for those that are
-      if self.X is None:
-        self.X = 0
-      if self.Y is None:
-        self.Y = 0
+      if self.x is None:
+        self.x = 0.
+      if self.y is None:
+        self.y = 0.
     else:
-      self.X = 0
-      self.Y = 0
+      self.x = 0.
+      self.y = 0.
 
   def _get_types(self):
     """
@@ -54,7 +54,7 @@ uint32 Y
     """
     try:
       _x = self
-      buff.write(_struct_2I.pack(_x.X, _x.Y))
+      buff.write(_struct_2f.pack(_x.x, _x.y))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(_x))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(_x))))
 
@@ -68,7 +68,7 @@ uint32 Y
       _x = self
       start = end
       end += 8
-      (_x.X, _x.Y,) = _struct_2I.unpack(str[start:end])
+      (_x.x, _x.y,) = _struct_2f.unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -82,7 +82,7 @@ uint32 Y
     """
     try:
       _x = self
-      buff.write(_struct_2I.pack(_x.X, _x.Y))
+      buff.write(_struct_2f.pack(_x.x, _x.y))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(_x))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(_x))))
 
@@ -97,10 +97,10 @@ uint32 Y
       _x = self
       start = end
       end += 8
-      (_x.X, _x.Y,) = _struct_2I.unpack(str[start:end])
+      (_x.x, _x.y,) = _struct_2f.unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = genpy.struct_I
-_struct_2I = struct.Struct("<2I")
+_struct_2f = struct.Struct("<2f")

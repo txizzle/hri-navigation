@@ -14,61 +14,61 @@
 
 (defclass hri_navigation::Goal
   :super ros::object
-  :slots (_X _Y ))
+  :slots (_x _y ))
 
 (defmethod hri_navigation::Goal
   (:init
    (&key
-    ((:X __X) 0)
-    ((:Y __Y) 0)
+    ((:x __x) 0.0)
+    ((:y __y) 0.0)
     )
    (send-super :init)
-   (setq _X (round __X))
-   (setq _Y (round __Y))
+   (setq _x (float __x))
+   (setq _y (float __y))
    self)
-  (:X
-   (&optional __X)
-   (if __X (setq _X __X)) _X)
-  (:Y
-   (&optional __Y)
-   (if __Y (setq _Y __Y)) _Y)
+  (:x
+   (&optional __x)
+   (if __x (setq _x __x)) _x)
+  (:y
+   (&optional __y)
+   (if __y (setq _y __y)) _y)
   (:serialization-length
    ()
    (+
-    ;; uint32 _X
+    ;; float32 _x
     4
-    ;; uint32 _Y
+    ;; float32 _y
     4
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; uint32 _X
-       (write-long _X s)
-     ;; uint32 _Y
-       (write-long _Y s)
+     ;; float32 _x
+       (sys::poke _x (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _y
+       (sys::poke _y (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; uint32 _X
-     (setq _X (sys::peek buf ptr- :integer)) (incf ptr- 4)
-   ;; uint32 _Y
-     (setq _Y (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; float32 _x
+     (setq _x (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _y
+     (setq _y (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;;
    self)
   )
 
-(setf (get hri_navigation::Goal :md5sum-) "d1f2aebb6961d1330665be5194655a79")
+(setf (get hri_navigation::Goal :md5sum-) "ff8d7d66dd3e4b731ef14a45d38888b6")
 (setf (get hri_navigation::Goal :datatype-) "hri_navigation/Goal")
 (setf (get hri_navigation::Goal :definition-)
-      "uint32 X
-uint32 Y
+      "float32 x
+float32 y
 ")
 
 
 
-(provide :hri_navigation/Goal "d1f2aebb6961d1330665be5194655a79")
+(provide :hri_navigation/Goal "ff8d7d66dd3e4b731ef14a45d38888b6")
 
 
