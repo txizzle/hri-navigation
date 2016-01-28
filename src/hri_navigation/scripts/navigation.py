@@ -111,6 +111,10 @@ def navigation():
         # Check if we've reached the current goal
         if distance([position['x'], position['y']], next_goal) < goal_radius:
             rospy.loginfo("Reached a goal! Waiting for next goal information")
+
+            # To sent more info: `rostopic pub -1 /next_goal hri_navigation/Goal -- 7.2 3.4`
+            # Replace 7.2 and 3.4 with own values
+ 
             global reached
             reached = True
 
@@ -124,22 +128,21 @@ def navigation():
 
             if abs(angle_offset) < 0.085:
                 nav_twist.linear.x = 2.0
-                rospy.loginfo("Heading straight for goal!")
+                rospy.loginfo("Heading straight for goal! Linear velocity: 2.0")
             else:
                 # Proportional control
                 if angle_offset  > 0.1745:
                     # 0.1745 rad ~= 10 deg
                     nav_twist.angular.z = 2.0
-                    rospy.loginfo("Need to go positive angle!")
+                    rospy.loginfo("Need to go positive angle! Angular velocity: 2.0")
                 elif angle_offset < -0.1745:
                     nav_twist.angular.z = -2.0
-                    rospy.loginfo("Need to go negative angle!")
+                    rospy.loginfo("Need to go negative angle! Angular velocity: 2.0")
                 else:
                     nav_twist.angular.z = angle_offset * 2.0 / 0.1745
                     nav_twist.linear.x = 2.0 * 0.085 / abs(angle_offset)
-                    rospy.loginfo("Between -10 deg and 10 deg! Angular velocity: %f and linear velocity: %f"%(nav_twist.angular.z, nav_twist.linear.x))
+                    rospy.loginfo("Between -10 deg and 10 deg off! Angular velocity: %f and linear velocity: %f"%(nav_twist.angular.z, nav_twist.linear.x))
             cv_publisher.publish(nav_twist)
-            # rospy.loginfo("Goal not reached! ")
         rate.sleep()
 
 if __name__ == '__main__':
