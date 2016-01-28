@@ -12,8 +12,8 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from hri_navigation.msg import Goal
-from math import atan
-from math import pi
+from math import atan2, pi
+from numpy.linalg import norm
 
 # Initialize values and constants
 position = {'x': 0.0, 'y': 0.0, 'theta': 0.0}
@@ -52,37 +52,12 @@ def pose_callback(msg):
 ##  Navigation Helpers  ##
 ##########################
 
-def distance(point1, point2):
-    # Takes in point1: [float, float] and point2: [float, float]
-    # Returns the absolute Euclidean distance between the two points
-    return ((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)**0.5
-
-def angle(point1, point2):
-    # Takes in point1: [float, float] and point2: [float, float]
-    # Returns the angle in radians between the two points, relative to the x-axis.
-    # Use should be: angle(position, goal)
-    dif_x = point2[0] - point1[0]
-    dif_y = point2[1] - point1[1]
-    if dif_x == 0.0:
-        if dif_y >= 0:
-            angle = pi/2
-        else:
-            angle = 3*pi/2
-    else:
-        # Quadrant I: angle between 0 and pi/2
-        angle = atan(dif_y / dif_x)
-        if dif_x < 0:
-            # Quadrant II and III: angle between pi/2 and 3*pi/2
-            angle = angle + pi
-        elif dif_y < 0:
-            # Quadrant IV: angle between 3*pi/2 and 2*pi
-            angle = angle + 2*pi
-    return angle
-
 def normalize_angle(theta):
-    # Take in an angle between -2pi and 2pi and convert it to an angle between 0 and 2pi.
-    if theta < 0:
+    # Take in an angle between -2pi and 2pi and convert it to an angle between -pi and pi.
+    if theta < -pi:
         return theta + 2*pi
+    elif theta > pi:
+        return theta - 2*pi
     else:
         return theta
 
@@ -106,7 +81,7 @@ def navigation():
 
     while not rospy.is_shutdown():
         # Check if we've reached the current goal
-        if distance([position['x'], position['y']], next_goal) < goal_radius:
+        if norm([position['x'] - next_goal[0], position['y'] - next_goal[1]]) < goal_radius:
             rospy.loginfo("Reached a goal! Waiting for next goal information")
 
             # To send more info: `rostopic pub -1 /next_goal hri_navigation/Goal -- 7.2 3.4`
@@ -119,9 +94,9 @@ def navigation():
             cv_publisher.publish(STOP_TWIST)
         else:
             nav_twist = Twist()
-            goal_angle = angle([position['x'], position['y']], next_goal)
+            goal_angle = atan2(next_goal[1] - position['y'], next_goal[0] - position['x'])
             norm_theta = normalize_angle(position['theta'])
-            angle_offset = goal_angle - norm_theta
+            angle_offset = normalize_angle(goal_angle - norm_theta)
 
             if abs(angle_offset) < 0.085:
                 nav_twist.linear.x = 2.0
@@ -132,9 +107,13 @@ def navigation():
                     # 0.1745 rad ~= 10 deg
                     nav_twist.angular.z = 2.0
                     rospy.loginfo("Need to go positive angle! Angular velocity: 2.0")
+                    rospy.loginfo("goal_angle: %f, norm_theta: %f"%(goal_angle, norm_theta))
+                    rospy.loginfo("angle_offset: %f"%(angle_offset))
                 elif angle_offset < -0.1745:
                     nav_twist.angular.z = -2.0
                     rospy.loginfo("Need to go negative angle! Angular velocity: 2.0")
+                    rospy.loginfo("goal_angle: %f, norm_theta: %f"%(goal_angle, norm_theta))
+                    rospy.loginfo("angle_offset: %f"%(angle_offset))
                 else:
                     nav_twist.angular.z = angle_offset * 2.0 / 0.1745
                     nav_twist.linear.x = 2.0 * 0.085 / abs(angle_offset)
